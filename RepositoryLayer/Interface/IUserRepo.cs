@@ -12,8 +12,8 @@ namespace RepositoryLayer.Interface
     {
         public UserResponse Register(UserRequest user);
         public string Login(loginRequest user);
-        public void AddAddress(AddAddressRequest address);
         string ForgetPassword(ForgetPasswordRequest request);
-        public bool ResetPassword(ResetPasswordRequest request,long userId);    
+        public bool ResetPassword(ResetPasswordRequest request,long userId);
+        UserResponse getUser(long userId);
     }
 }

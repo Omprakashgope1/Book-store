@@ -25,10 +25,7 @@ namespace BusinessLayer.Services
         {
             return _userRepo.Login(user);
         }
-        public void AddAddress(AddAddressRequest address)
-        {
-           _userRepo.AddAddress(address);
-        }
+        
         public string ForgetPassword(ForgetPasswordRequest request)
         {
             return _userRepo.ForgetPassword(request);
@@ -38,5 +35,9 @@ namespace BusinessLayer.Services
             return _userRepo.ResetPassword(request,userId);
         }
 
+        public UserResponse getUser(long userId)
+        {
+            return _userRepo.getUser(userId);
+        }
     }
 }

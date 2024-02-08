@@ -86,6 +86,8 @@ namespace BookStore
             builder.Services.AddTransient<IOrderBusiness,OrderBusiness>();
             builder.Services.AddTransient<IReviewRepo,ReviewRepo>();
             builder.Services.AddTransient<IReviewBusiness,ReviewBusiness>();
+            builder.Services.AddTransient<IAddressBusiness, AddressBusiness>();
+            builder.Services.AddTransient<IAddressRepo, AddressRepo>();
 
             var app = builder.Build();
             // Configure the HTTP request pipeline.

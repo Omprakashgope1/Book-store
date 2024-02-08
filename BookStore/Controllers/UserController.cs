@@ -43,19 +43,7 @@ namespace BookStore.Controllers
                 return BadRequest(new { success = false, message = "login failed", data = ex.Message});
             }
         }
-        [HttpPost("addAddress")]
-        public IActionResult AddAddress([FromBody]AddAddressRequest addAddress)
-        {
-            try
-            {
-                userBusiness.AddAddress(addAddress);
-                return Ok(new { success = true, message = "added address" });
-            }
-            catch(Exception ex) 
-            {
-                return BadRequest(new { success = true, message = "not able to add the address" });
-            }
-        }
+        
         [HttpPut("ForgetPassword")]
         public IActionResult forgetPassword([FromBody]ForgetPasswordRequest forgetPass)
         {
@@ -87,6 +75,20 @@ namespace BookStore.Controllers
             catch(Exception ex)
             {
                 return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [Authorize]
+        [HttpGet("LoggedInUser")]
+        public IActionResult getUser()
+        {
+            try
+            {
+                long userId = Convert.ToInt64(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                UserResponse user = userBusiness.getUser(userId);
+                return Ok(new {success = true,message = "user found",data = user});
+            }catch(Exception e)
+            {
+                return BadRequest(new {success = false,message = "user not found",data = e.Message});
             }
         }
     }

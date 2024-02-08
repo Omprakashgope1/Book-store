@@ -9,3 +9,4 @@ C:\Users\OM\source\repos\BookStore\CommonLayer\obj\Debug\net6.0\CommonLayer.dll
 C:\Users\OM\source\repos\BookStore\CommonLayer\obj\Debug\net6.0\refint\CommonLayer.dll
 C:\Users\OM\source\repos\BookStore\CommonLayer\obj\Debug\net6.0\CommonLayer.pdb
 C:\Users\OM\source\repos\BookStore\CommonLayer\obj\Debug\net6.0\ref\CommonLayer.dll
+C:\Users\OM\source\repos\BookStore\CommonLayer\obj\Debug\net6.0\CommonLayer.sourcelink.json

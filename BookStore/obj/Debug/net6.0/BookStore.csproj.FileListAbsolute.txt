@@ -61,3 +61,4 @@ C:\Users\OM\source\repos\BookStore\BookStore\bin\Debug\net6.0\Microsoft.Identity
 C:\Users\OM\source\repos\BookStore\BookStore\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\OM\source\repos\BookStore\BookStore\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\OM\source\repos\BookStore\BookStore\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\OM\source\repos\BookStore\BookStore\obj\Debug\net6.0\BookStore.sourcelink.json

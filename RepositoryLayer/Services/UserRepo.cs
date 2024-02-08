@@ -87,21 +87,6 @@ namespace RepositoryLayer.Services
                 return token;
             }
         }
-        public void AddAddress(AddAddressRequest address)
-        {
-            using(SqlConnection sql = new SqlConnection(this.connectionString)) 
-            {
-                SqlCommand cmd = new SqlCommand("add_Address", sql);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@userId", address.userId);
-                cmd.Parameters.AddWithValue("@fullAddress", address.fullAddress);
-                cmd.Parameters.AddWithValue("@city", address.city);
-                cmd.Parameters.AddWithValue("@state", address.state);
-                cmd.Parameters.AddWithValue("@type", address.type);
-                sql.Open();
-                cmd.ExecuteNonQuery();
-            }
-        }
         private string GenerateToken(string Email, long UserId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
@@ -167,6 +152,11 @@ namespace RepositoryLayer.Services
                 }
                 return true;
             }
+        }
+
+        public UserResponse getUser(long userId)
+        {
+            return GetUserById(userId);
         }
     }
 }

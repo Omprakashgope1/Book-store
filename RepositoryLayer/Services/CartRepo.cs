@@ -67,6 +67,7 @@ namespace RepositoryLayer.Services
                     book.Description = reader.GetString("detail");
                     book.quantity = reader.GetInt32("cart_quantity");
                     book.price = Convert.ToDouble(reader["price"]);
+                    book.image = reader.GetString("image");
                     boolList.Add(book); 
                 }
                 return boolList;
