@@ -1,11 +1,13 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model.RequestModel;
 using CommonLayer.Model.ResponseModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase

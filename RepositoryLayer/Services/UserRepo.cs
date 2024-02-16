@@ -41,8 +41,7 @@ namespace RepositoryLayer.Services
                 sqlCommand.ExecuteNonQuery();
                 long val = Convert.ToInt64(userId.Value);
                 return GetUserById(val);
-            }
-            
+            }    
         }
         public UserResponse GetUserById(long id) 
         {
@@ -157,6 +156,22 @@ namespace RepositoryLayer.Services
         public UserResponse getUser(long userId)
         {
             return GetUserById(userId);
+        }
+        public UserResponse UpdateUserId(UserRequest req,long userId) 
+        {
+            using(SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("update_user", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@email", req.email);
+                cmd.Parameters.AddWithValue("@fullname", req.fullName);
+                cmd.Parameters.AddWithValue("@mobnum", req.mobnum);
+                cmd.Parameters.AddWithValue("@password", req.password);
+                cmd.ExecuteNonQuery();
+                return GetUserById(userId);
+            }
         }
     }
 }

@@ -15,5 +15,6 @@ namespace RepositoryLayer.Interface
         string ForgetPassword(ForgetPasswordRequest request);
         public bool ResetPassword(ResetPasswordRequest request,long userId);
         UserResponse getUser(long userId);
+        public UserResponse UpdateUserId(UserRequest req, long userId);
     }
 }

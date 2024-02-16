@@ -15,5 +15,6 @@ namespace BusinessLayer.Interface
         string ForgetPassword(ForgetPasswordRequest forgetPass);
         public bool ResetPassword(ResetPasswordRequest request,long userId);
         UserResponse getUser(long userId);
+        public UserResponse UpdateUserId(UserRequest req, long userId);
     }
 }

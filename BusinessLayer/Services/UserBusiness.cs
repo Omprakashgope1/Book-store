@@ -39,5 +39,9 @@ namespace BusinessLayer.Services
         {
             return _userRepo.getUser(userId);
         }
+        public UserResponse UpdateUserId(UserRequest req, long userId)
+        {
+            return _userRepo.UpdateUserId(req,userId);
+        }
     }
 }

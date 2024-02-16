@@ -4,6 +4,7 @@ using CommonLayer.Model.ResponseModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace BookStore.Controllers
 {
@@ -89,6 +90,21 @@ namespace BookStore.Controllers
             }catch(Exception e)
             {
                 return BadRequest(new {success = false,message = "user not found",data = e.Message});
+            }
+        }
+        [Authorize]
+        [HttpPut("updateUser")]
+        public IActionResult updateUser(UserRequest req)
+        {
+            try
+            {
+                long userId = Convert.ToInt64(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                UserResponse user = userBusiness.UpdateUserId(req, userId);
+                return Ok(new { success = true, message = "user update", data = user });
+            }
+            catch(Exception e) 
+            {
+                return BadRequest(new {success = false,message ="not able to update the user",data = e.Message});
             }
         }
     }

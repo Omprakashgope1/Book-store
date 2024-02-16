@@ -35,5 +35,9 @@ namespace BusinessLayer.Services
         {
             _cartRepo.UpdateBookQuantity(userId, req);
         }
+        public void removeCart(long bookId, long userId)
+        {
+            _cartRepo.removeCart(bookId, userId);
+        }
     }
 }

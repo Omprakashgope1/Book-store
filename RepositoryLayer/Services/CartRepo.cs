@@ -94,6 +94,18 @@ namespace RepositoryLayer.Services
                 }
             }
         }
+        public void removeCart(long bookId,long userId)
+        {
+            using(SqlConnection conn = new SqlConnection(this.connectionString)) 
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("delete_cart", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@bookId", bookId);
+                cmd.ExecuteNonQuery();
+            }
+        }
        
     }
 }

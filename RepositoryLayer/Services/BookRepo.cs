@@ -65,6 +65,7 @@ namespace RepositoryLayer.Services
                     book.Author = reader.GetString("author");
                     book.Description = reader.GetString("detail");
                     book.quantity = reader.GetInt32("quantity");
+                    book.image = reader.GetString("image");
                 }
                 return book;
             }

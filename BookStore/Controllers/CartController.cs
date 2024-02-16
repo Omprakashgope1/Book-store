@@ -24,7 +24,7 @@ namespace BookStore.Controllers
             {
                 long userId = Convert.ToInt64(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
                 List<BookResponse> cart_item = _cartBusiness.AddToCart(addToCartRequest, userId);
-                return Ok(new { success = true, message = "added to cart" ,cart_item});
+                return Ok(new { success = true, message = "added to cart" ,data = cart_item});
             }
             catch (Exception ex) 
             {
@@ -72,6 +72,20 @@ namespace BookStore.Controllers
             catch(Exception ex) 
             {
                 return BadRequest(new {success = false,message = ex.Message});
+            }
+        }
+        [HttpDelete("removeCart")]
+        public IActionResult removeCart([FromQuery] long bookId)
+        {
+            try
+            {
+                long userId = Convert.ToInt64(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                _cartBusiness.removeCart(bookId,userId);
+                return Ok(new { success = true, message = "cart removed" }); ;
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new {success = false,message = "not able to remove the cart",data = e.Message});
             }
         }
     }
