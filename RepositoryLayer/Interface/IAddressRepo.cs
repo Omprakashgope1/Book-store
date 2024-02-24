@@ -10,7 +10,8 @@ namespace RepositoryLayer.Interface
 {
     public interface IAddressRepo
     {
-        public void AddAddress(AddAddressRequest address);
+        public IEnumerable<AddressResponse> AddAddress(AddAddressRequest address);
         public IEnumerable<AddressResponse> GetAddress(long userId);
+        public IEnumerable<AddressResponse> UpdateAddress(updateAddressRequest req, long userId);
     }
 }

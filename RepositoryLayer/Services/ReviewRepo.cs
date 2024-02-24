@@ -20,7 +20,7 @@ namespace RepositoryLayer.Services
         {
             connectionString = configuration.GetConnectionString("DefaultString");
         }
-        public AddReview AddReviews(long userId, AddReview reviews)
+        public IEnumerable<ReviewResponse> AddReviews(long userId, AddReview reviews)
         {
             using(SqlConnection conn = new SqlConnection(connectionString)) 
             {
@@ -32,7 +32,7 @@ namespace RepositoryLayer.Services
                 cmd.Parameters.AddWithValue("@bookId", reviews.bookId);
                 cmd.Parameters.AddWithValue("@userId", userId);
                 cmd.ExecuteNonQuery();
-                return reviews;
+                return GetAllReviews(reviews.bookId);
             }
         }
         public IEnumerable<ReviewResponse> GetAllReviews(long bookId)
@@ -46,6 +46,27 @@ namespace RepositoryLayer.Services
                 SqlDataReader reader = cmd.ExecuteReader();
                 List<ReviewResponse> reviews = new List<ReviewResponse>();
                 while(reader.Read()) 
+                {
+                    ReviewResponse review = new ReviewResponse();
+                    review.name = reader.GetString("name");
+                    review.star = reader.GetInt32("rating");
+                    review.review = reader.GetString("review");
+                    review.bookId = reader.GetInt32("bookId");
+                    reviews.Add(review);
+                }
+                return reviews;
+            }
+        }
+        public IEnumerable<ReviewResponse> GetReviews()
+        {   
+            using(SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("get_all_review", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = cmd.ExecuteReader();
+                List<ReviewResponse> reviews = new List<ReviewResponse>();
+                while (reader.Read())
                 {
                     ReviewResponse review = new ReviewResponse();
                     review.name = reader.GetString("name");

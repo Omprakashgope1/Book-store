@@ -17,13 +17,17 @@ namespace BusinessLayer.Services
         {
             this.reviewRepo = reviewRepo;
         }
-        public AddReview AddReviews(long userId,AddReview reviews)
+        public IEnumerable<ReviewResponse> AddReviews(long userId,AddReview reviews)
         {
             return reviewRepo.AddReviews(userId,reviews);
         }
         public IEnumerable<ReviewResponse> GetAllReviews(long bookId)
         {
             return reviewRepo.GetAllReviews(bookId);
+        }
+        public IEnumerable<ReviewResponse> GetReviews()
+        {
+            return reviewRepo.GetReviews();
         }
     }
 }

@@ -17,13 +17,17 @@ namespace BusinessLayer.Services
         {
             _addressRepo = addressRepo;
         }
-        public void AddAddress(AddAddressRequest address)
+        public IEnumerable<AddressResponse> AddAddress(AddAddressRequest address)
         {
-            _addressRepo.AddAddress(address);
+            return _addressRepo.AddAddress(address);
         }
         public IEnumerable<AddressResponse> GetAddress(long userId)
         {
             return _addressRepo.GetAddress(userId);
+        }
+        public IEnumerable<AddressResponse> UpdateAddress(updateAddressRequest req, long userId)
+        {
+            return _addressRepo.UpdateAddress(req, userId);
         }
     }
 }

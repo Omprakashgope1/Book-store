@@ -24,15 +24,15 @@ namespace BookStore.Controllers
             try
             {
                 addAddress.userId = Convert.ToInt64(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
-                addressBusiness.AddAddress(addAddress);
-                return Ok(new { success = true, message = "added address" });
+                IEnumerable<AddressResponse> res=addressBusiness.AddAddress(addAddress);
+                return Ok(new { success = true, message = "added address", data = res});
             }
             catch (Exception ex)
             {
                 return BadRequest(new { success = true, message = "not able to add the address" });
             }
         }
-        [HttpGet("get_address")]
+        [HttpGet("getAddress")]
         public IActionResult GetAddress() 
         {
             try
@@ -46,5 +46,18 @@ namespace BookStore.Controllers
                 return BadRequest(new {success = false,message = "Address not found",data = e.Message});
             }
          }
+        [HttpPut("updateAddress")]
+        public IActionResult UpdateAddress([FromBody]updateAddressRequest req)
+        {
+            try
+            {
+                long userId = Convert.ToInt64(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                IEnumerable<AddressResponse> addresses =addressBusiness.UpdateAddress(req,userId);
+                return Ok(new { success = true, message = "Address updated", data = addresses });
+            }catch(Exception e)
+            {
+                return BadRequest(new { success = false, message = "Address not updated", data = e.Message });
+            }
+        }
     }
 }

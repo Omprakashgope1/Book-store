@@ -20,7 +20,7 @@ namespace RepositoryLayer.Services
         {
             connectionString = configuration.GetConnectionString("DefaultString");
         }
-        public void AddAddress(AddAddressRequest address)
+        public IEnumerable<AddressResponse> AddAddress(AddAddressRequest address)
         {
             using (SqlConnection sql = new SqlConnection(this.connectionString))
             {
@@ -33,6 +33,7 @@ namespace RepositoryLayer.Services
                 cmd.Parameters.AddWithValue("@type", address.type);
                 sql.Open();
                 cmd.ExecuteNonQuery();
+                return GetAddress(address.userId);
             }
         }
         public IEnumerable<AddressResponse> GetAddress(long userId) 
@@ -51,9 +52,28 @@ namespace RepositoryLayer.Services
                     response.fullAddress = reader.GetString("fullAddress");
                     response.state = reader.GetString("state");
                     response.city = reader.GetString("city");
+                    response.type = reader.GetInt32("type");
+                    response.addressId = reader.GetInt32("addressId");
                     addresses.Add(response);
                 }
                 return addresses;
+            }
+        }
+        public IEnumerable<AddressResponse> UpdateAddress(updateAddressRequest req,long userId)
+        {
+            using(SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("update_address",conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@addressId", req.addressId);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@fullAddress", req.fullAddress);
+                cmd.Parameters.AddWithValue("@state", req.state);
+                cmd.Parameters.AddWithValue("@city", req.city);
+                cmd.Parameters.AddWithValue("@type",req.type);
+                cmd.ExecuteNonQuery();
+                return GetAddress(userId);
             }
         }
     }

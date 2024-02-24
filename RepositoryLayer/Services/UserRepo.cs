@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace RepositoryLayer.Services
 {
@@ -19,19 +20,22 @@ namespace RepositoryLayer.Services
     {
         private string connectionString;
         private readonly IConfiguration config;
-        public UserRepo(IConfiguration configuration) 
+        private readonly IDataProtector _protector;
+        public UserRepo(IConfiguration configuration, IDataProtectionProvider provider) 
         {
             this.connectionString = configuration.GetConnectionString("DefaultString");
             this.config = configuration;
+            this._protector = provider.CreateProtector("Encrypt_this_thing");
         }
         public UserResponse Register(UserRequest user)
         {
             using(SqlConnection sql = new SqlConnection(this.connectionString))
             {
                 sql.Open();
+                string encryptPassword = _protector.Protect(user.password);
                 SqlCommand sqlCommand = new SqlCommand("Register_User", sql);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
-                sqlCommand.Parameters.AddWithValue("@password", user.password);
+                sqlCommand.Parameters.AddWithValue("@password", encryptPassword);
                 sqlCommand.Parameters.AddWithValue("@fullname", user.fullName);
                 sqlCommand.Parameters.AddWithValue("@email", user.email);
                 sqlCommand.Parameters.AddWithValue("@mobNum", user.mobnum);
@@ -67,20 +71,27 @@ namespace RepositoryLayer.Services
         {
             using(SqlConnection sql = new SqlConnection(this.connectionString))
             {
+                string encryptPassword = _protector.Protect(login.password);
                 SqlCommand cmd = new SqlCommand("login_user",sql);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@email", login.email);
-                cmd.Parameters.AddWithValue("@password",login.password);
                 sql.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
+                string comparePassword = null;
                 Boolean successful = false;
                 int val = 0;
                 while(reader.Read())
                 {
                     val = Convert.ToInt32(reader["LoginSuccess"]);
+                    comparePassword = reader.GetString("password");
                     if (val != 0) successful = true;
                     else
                         throw new Exception("email and password does not match");
+                }
+                comparePassword = _protector.Unprotect(comparePassword);
+                if(comparePassword != login.password)
+                {
+                    throw new Exception("Wrong password");
                 }
                 string token = GenerateToken(login.email, val);
                 return token;
@@ -134,11 +145,12 @@ namespace RepositoryLayer.Services
             using(SqlConnection conn = new SqlConnection(connectionString)) 
             {
                 conn.Open();
+                string encryptPassword = _protector.Protect(request.newPassword);
                 SqlCommand cmd = new SqlCommand("reset_password", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 if (request.newPassword != request.confirmPassword)
                     throw new Exception("New and confirm password does not match");
-                cmd.Parameters.AddWithValue("@password", request.newPassword);
+                cmd.Parameters.AddWithValue("@password", encryptPassword);
                 cmd.Parameters.AddWithValue("@userId", userId);
                 SqlParameter status = new SqlParameter("@status",SqlDbType.Int);
                 status.Direction = ParameterDirection.Output;
@@ -162,13 +174,14 @@ namespace RepositoryLayer.Services
             using(SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
+                string encryptPassword = _protector.Protect(req.password);
                 SqlCommand cmd = new SqlCommand("update_user", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@userId", userId);
                 cmd.Parameters.AddWithValue("@email", req.email);
                 cmd.Parameters.AddWithValue("@fullname", req.fullName);
                 cmd.Parameters.AddWithValue("@mobnum", req.mobnum);
-                cmd.Parameters.AddWithValue("@password", req.password);
+                cmd.Parameters.AddWithValue("@password", encryptPassword);
                 cmd.ExecuteNonQuery();
                 return GetUserById(userId);
             }

@@ -10,7 +10,8 @@ namespace BusinessLayer.Interface
 {
     public interface IAddressBusiness
     {
-        public void AddAddress(AddAddressRequest address);
+        public IEnumerable<AddressResponse> AddAddress(AddAddressRequest address);
         public IEnumerable<AddressResponse> GetAddress(long userId);
+        public IEnumerable<AddressResponse> UpdateAddress(updateAddressRequest req, long userId);
     }
 }

@@ -10,7 +10,8 @@ namespace RepositoryLayer.Interface
 {
     public interface IReviewRepo
     {
-        public AddReview AddReviews(long userId,AddReview reviews);
+        public IEnumerable<ReviewResponse> AddReviews(long userId,AddReview reviews);
         public IEnumerable<ReviewResponse> GetAllReviews(long bookId);
+        public IEnumerable<ReviewResponse> GetReviews();
     }
 }
